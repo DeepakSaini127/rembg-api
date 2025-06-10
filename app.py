@@ -8,6 +8,10 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/')
+def home():
+    return 'Rembg server is running!'
+
 @app.route('/remove-bg', methods=['POST'])
 def remove_bg():
     if 'file' not in request.files:
@@ -24,14 +28,6 @@ def remove_bg():
         download_name='no-bg.png'
     )
 
-
-
-
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Render sets PORT env variable
-    app.run(host="0.0.0.0", port=port)
-
-
-@app.route('/')
-def home():
-    return 'Rembg server is running!'
+    port = int(os.environ.get("PORT", 5000))  # Render uses PORT environment variable
+    app.run(host="0.0.0.0", port=port)    return 'Rembg server is running!'
