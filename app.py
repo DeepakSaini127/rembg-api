@@ -1,37 +1,25 @@
-from flask import Flask, request, send_file
-from flask_cors import CORS
+# backend/app.py
+from flask import Flask, request, send_file, jsonify
 from rembg import remove
-import io
+from io import BytesIO
 from PIL import Image
-import os
 
 app = Flask(__name__)
-CORS(app)
 
-@app.route('/remove-bg', methods=['POST'])
+@app.route("/api/remove-bg", methods=["POST"])
 def remove_bg():
-    if 'file' not in request.files:
-        return 'No file uploaded', 400
-
-    input_file = request.files['file']
-    input_bytes = input_file.read()
-    output = remove(input_bytes)
-
-    return send_file(
-        io.BytesIO(output),
-        mimetype='image/png',
-        as_attachment=False,
-        download_name='no-bg.png'
-    )
-
-
-
+    if 'image' not in request.files:
+        return jsonify({"error": "No image file provided."}), 400
+    
+    input_file = request.files['image']
+    img = Image.open(input_file.stream).convert("RGBA")
+    output = remove(img)
+    
+    buf = BytesIO()
+    output.save(buf, format="PNG")
+    buf.seek(0)
+    
+    return send_file(buf, mimetype="image/png")
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Render sets PORT env variable
-    app.run(host="0.0.0.0", port=port)
-
-
-@app.route('/')
-def home():
-    return 'Rembg server is running!'
+    app.run(host="0.0.0.0", port=5000)
