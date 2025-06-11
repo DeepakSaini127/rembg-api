@@ -1,14 +1,13 @@
-# app.py
 from flask import Flask, request, send_file, jsonify, render_template_string
 from rembg import remove
 from io import BytesIO
 from PIL import Image
 import logging
+import os
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
-# Simple home route
 @app.route("/")
 def home():
     return render_template_string("""
@@ -37,4 +36,5 @@ def remove_bg():
         return jsonify({"error": "Failed to process image."}), 500
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
