@@ -11,10 +11,7 @@ logging.basicConfig(level=logging.INFO)
 # Simple home route
 @app.route("/")
 def home():
-    return render_template_string("""
-        <h2>Welcome to the Background Remover API</h2>
-        <p>Use <code>POST /api/remove-bg</code> with form-data to remove image backgrounds.</p>
-    """)
+    return "Render Home page is running...."
 
 @app.route("/api/remove-bg", methods=["POST"])
 def remove_bg():
