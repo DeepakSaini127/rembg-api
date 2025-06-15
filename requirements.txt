@@ -1,6 +1,4 @@
+fastapi
+uvicorn
 rembg
-flask
-flask-cors
-gunicorn
-pillow
-onnxruntime
+python-multipart
